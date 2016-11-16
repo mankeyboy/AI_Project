@@ -18,108 +18,108 @@ import random
 
 
 
-# def L(ePos):
-#     return ePos - 1
-# def R(ePos):
-#     return ePos + 1
-# def D(ePos):
-#     return ePos + 3
-# def U(ePos):
-#     return ePos - 3
+def L(ePos):
+    return ePos - 1
+def R(ePos):
+    return ePos + 1
+def D(ePos):
+    return ePos + 3
+def U(ePos):
+    return ePos - 3
 
-# def availActions(ePos):
-#     if ePos == 0 :
-#         return ['R','D']
-#     elif ePos == 1 :
-#         return ['L', 'D', 'R']
-#     elif ePos == 2 :
-#         return ['L', 'D']
-#     elif ePos == 3 :
-#         return [ 'U', 'D', 'R']
-#     elif ePos == 4 :
-#         return ['L', 'U', 'D', 'R']
-#     elif ePos == 5 :
-#         return ['L', 'U', 'D']
-#     elif ePos == 6 :
-#         return ['U', 'R']
-#     elif ePos == 7 :
-#         return ['L', 'U', 'R']
-#     elif ePos == 8 :
-#         return ['L', 'U']
+def availActions(ePos):
+    if ePos == 0 :
+        return ['R','D']
+    elif ePos == 1 :
+        return ['L', 'D', 'R']
+    elif ePos == 2 :
+        return ['L', 'D']
+    elif ePos == 3 :
+        return [ 'U', 'D', 'R']
+    elif ePos == 4 :
+        return ['L', 'U', 'D', 'R']
+    elif ePos == 5 :
+        return ['L', 'U', 'D']
+    elif ePos == 6 :
+        return ['U', 'R']
+    elif ePos == 7 :
+        return ['L', 'U', 'R']
+    elif ePos == 8 :
+        return ['L', 'U']
         
 
-# def h(State,choice):
-#     cost = 0
-#     if choice == 'a' :
-#         return cost
-#     elif choice == 'b' :
-#         for i in range(len(State)) :       #Huerisitc B
-#             if State[i] != i and State[i] != 0 :
-#                 cost += 1
-#     elif choice == 'c' :
-#         for i in range(len(State)):
-#             cost += (abs(i%3 - State[i]%3) + abs((i/3) - (State[i]/3)))
-#     return cost
+def h(State,choice):
+    cost = 0
+    if choice == 'a' :
+        return cost
+    elif choice == 'b' :
+        for i in range(len(State)) :       #Huerisitc B
+            if State[i] != i and State[i] != 0 :
+                cost += 1
+    elif choice == 'c' :
+        for i in range(len(State)):
+            cost += (abs(i%3 - State[i]%3) + abs((i/3) - (State[i]/3)))
+    return cost
 
-# def newState(oldState, action, ePos,gCost,choice):
-#     newS = oldState[:]
-#     if action == 'L' :
-#         newS[ePos],newS[L(ePos)] = oldState[L(ePos)],oldState[ePos]
-#         ePos -= 1
-#         gCost += 1
-#     elif action == 'R':
-#         newS[ePos],newS[R(ePos)] = oldState[R(ePos)],oldState[ePos]
-#         ePos += 1
-#         gCost += 1
-#     elif action == 'D':
-#         newS[ePos], newS[D(ePos)] = oldState[D(ePos)],oldState[ePos]
-#         ePos += 3
-#         gCost += 1
-#     elif action == 'U':
-#         newS[ePos], newS[U(ePos)] = oldState[U(ePos)],oldState[ePos]
-#         ePos -= 3
-#         gCost += 1
-#     fCost = gCost + h(newS,choice)
-#     # print newS, fCost
-#     s =(fCost,gCost,newS,ePos,oldState)
-#     return s
+def newState(oldState, action, ePos,gCost,choice):
+    newS = oldState[:]
+    if action == 'L' :
+        newS[ePos],newS[L(ePos)] = oldState[L(ePos)],oldState[ePos]
+        ePos -= 1
+        gCost += 1
+    elif action == 'R':
+        newS[ePos],newS[R(ePos)] = oldState[R(ePos)],oldState[ePos]
+        ePos += 1
+        gCost += 1
+    elif action == 'D':
+        newS[ePos], newS[D(ePos)] = oldState[D(ePos)],oldState[ePos]
+        ePos += 3
+        gCost += 1
+    elif action == 'U':
+        newS[ePos], newS[U(ePos)] = oldState[U(ePos)],oldState[ePos]
+        ePos -= 3
+        gCost += 1
+    fCost = gCost + h(newS,choice)
+    # print newS, fCost
+    s =(fCost,gCost,newS,ePos,oldState)
+    return s
 
-# def checkIfGoal(State):
-#     for i in range(len(State[1:])):
-#         if State[i] != i :
-#             return False
-#     return True
+def checkIfGoal(State):
+    for i in range(len(State[1:])):
+        if State[i] != i :
+            return False
+    return True
 
-# def Solver(startState,choice):
-#     # print "Inside Solver"
-#     for i in range(len(startState)):
-#         if startState[i] == 0 :
-#             ePos = i
-#             break 
-#     nodesExpanded = 0
-#     if (checkIfGoal(startState)):
-#         return startState
-#     else :
-#         gCost = 0
-#         fCost = h(startState,choice) + gCost
-#         currentState = startState
-#         pQueue = []
-#         heapq.heappush(pQueue,(fCost,gCost,currentState,ePos,None))
-#         while True :
-#             currentState = heapq.heappop(pQueue)
-#             oldState = currentState[2]
-#             ePos = currentState[3]
-#             gCost = currentState[1]
-#             parent = currentState[4] 
-#             if(checkIfGoal(oldState)) :
-#                 print "Nodes Expanded = %d" % nodesExpanded
-#                 return currentState
-#             actions = availActions(ePos)
-#             nodesExpanded += 1
-#             for i in actions :
-#                 newS = newState(oldState,i,ePos,gCost,choice)
-#                 if newS[2] != parent :
-#                     heapq.heappush(pQueue,newS)
+def Solver(startState,choice):
+    # print "Inside Solver"
+    for i in range(len(startState)):
+        if startState[i] == 0 :
+            ePos = i
+            break 
+    nodesExpanded = 0
+    if (checkIfGoal(startState)):
+        return startState
+    else :
+        gCost = 0
+        fCost = h(startState,choice) + gCost
+        currentState = startState
+        pQueue = []
+        heapq.heappush(pQueue,(fCost,gCost,currentState,ePos,None))
+        while True :
+            currentState = heapq.heappop(pQueue)
+            oldState = currentState[2]
+            ePos = currentState[3]
+            gCost = currentState[1]
+            parent = currentState[4] 
+            if(checkIfGoal(oldState)) :
+                print "Nodes Expanded = %d" % nodesExpanded
+                return currentState
+            actions = availActions(ePos)
+            nodesExpanded += 1
+            for i in actions :
+                newS = newState(oldState,i,ePos,gCost,choice)
+                if newS[2] != parent :
+                    heapq.heappush(pQueue,newS)
         
 
 # if __name__ == '__main__':
