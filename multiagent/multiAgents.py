@@ -111,7 +111,41 @@ class MinimaxAgent(MultiAgentSearchAgent):
     """
       Your minimax agent (question 2)
     """
-    
+    def minFunc(self, gameState, depth):
+        actions = gameState.getLegalActions(depth % gameState.getNumAgents())
+        if len(actions) == 0:
+            return (None, self.evaluationFunction(gameState))
+
+        min_val = (None, float("inf"))
+        for action in actions:
+            succ = gameState.generateSuccessor(depth % gameState.getNumAgents(), action)
+            res = self.value(succ, depth+1)
+            if res[1] < min_val[1]:
+                min_val = (action, res[1])
+        return min_val
+
+    def maxFunc(self, gameState, depth):
+        actions = gameState.getLegalActions(0)
+        if len(actions) == 0:
+            return (None, self.evaluationFunction(gameState))
+
+        max_val = (None, -float("inf"))
+        for action in actions:
+            succ = gameState.generateSuccessor(0, action)
+            res = self.value(succ, depth+1)
+            if res[1] > max_val[1]:
+                max_val = (action, res[1])
+        return max_val
+
+    def value(self, gameState, depth):
+        if depth == self.depth * gameState.getNumAgents() or gameState.isWin() or gameState.isLose():
+            return (None, self.evaluationFunction(gameState))
+        if depth % gameState.getNumAgents() == 0:
+            # pacman
+            return self.maxFunc(gameState, depth)
+        else:
+            # ghosts
+            return self.minFunc(gameState, depth)
 
     def getAction(self, gameState):
         """
