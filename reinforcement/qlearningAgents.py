@@ -109,7 +109,11 @@ class QLearningAgent(ReinforcementAgent):
         return self.computeActionFromQValues(state)
 
     def getValue(self, state):
-        return self.computeValueFromQValues(state)
+        possibleStateQValues = util.Counter()
+        for action in self.getLegalActions(state):
+            possibleStateQValues[action] = self.getQValue(state, action)
+        
+        return possibleStateQValues[possibleStateQValues.argMax()]
 
 
 class PacmanQAgent(QLearningAgent):
