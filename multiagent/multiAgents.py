@@ -76,7 +76,30 @@ class ReflexAgent(Agent):
         newGhostStates = successorGameState.getGhostStates()
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
-       
+        eatGhost = 0
+        for index in range(len(newGhostStates)):
+            dist = util.manhattanDistance(newPos, newGhostStates[index].getPosition())
+            if dist == 0: dist = 1e-8
+            if dist <= newScaredTimes[index] / 1.5:
+                eatGhost += (1./dist)*100
+            elif dist <= 3:
+                eatGhost -= (1./dist)*100
+
+        closeFood = 0
+        for row in newFood[newPos[0]-1:newPos[0]+2]:
+            for el in row[newPos[1]-1:newPos[1]+2]:
+                if el: closeFood += 1
+
+        tabu = 0
+        if newPos in self.tabu_list:
+            tabu = -100
+        
+        food = 0
+        if newPos in currentGameState.getFood().asList():
+            food = 10
+
+        return closeFood + eatGhost + tabu + food
+
 def scoreEvaluationFunction(currentGameState):
     """
       This default evaluation function just returns the score of the state.
