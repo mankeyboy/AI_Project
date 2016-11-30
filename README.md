@@ -25,3 +25,5 @@ Ignore:
 
 	Assignment_2
 	It has a basic 8 puzzle solver given the set of initial positions using AStar and IDAstar.
+
+I will try to complete the classification tasks sometime later if I find the time. Until then, this is the final state of things :)
