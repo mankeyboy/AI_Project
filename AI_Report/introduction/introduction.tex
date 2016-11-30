@@ -1,0 +1,68 @@
+\chapter{Pac-Man Projects}
+
+\section{Motivation and Objectives}
+
+The idea behind solving the PacMan Projects was the understanding and implementation of all the concepts we had learned in the course but had not been apply anywhere so we had no experience visualising solutions based on those concepts. Each of the tasks implemented related directly to at least one or more of the topics we've done in class directly. Also, the project provides an autograder that creates randomized testcases to test our implementations on and to provide a check whether our implementations works properly or not.
+
+\textbf{\href{https://github.com/mankeyboy/AI_Project}{URL for Repository}}
+
+The tasks are as follows:
+\begin{enumerate}
+\item \textbf{Search}: Involved implementing depth-first, breadth-first, uniform cost, and A* search algorithms. These algorithms are used to solve navigation and traveling salesman problems in the Pacman world.
+
+\item \textbf{Multi-Agent Adversarial Search}: Classic Pacman is modeled as both an adversarial and a stochastic search problem. This involved implementing multiagent minimax and expectimax algorithms, as well as designing evaluation functions for each of the heuristics where the adversaries are the ghosts.
+
+\item \textbf{Reinforcement Learning}: This involved implementing model-based and model-free reinforcement learning algorithms to Pacman for unsupervised test runs in the game maze of varying sizes and learning from chosen number of episodes for every test run of the Q-Learned Agent.
+
+\item \textbf{Ghostbusters}: Probabilistic inference in a hidden Markov model tracks the movement of hidden ghosts in the Pacman world and we implemented exact inference using the forward algorithm and approximate inference via particle filters.
+\end{enumerate}
+
+\section{Search}
+\subsection{Food Search}
+The first task was to solve the path searching to the food source at a corner of the maze.
+\fig{maze.png}{The Search Tasks}{0.4}
+This problem was solved using an implementation of DFS, BFS and A* search with no limits on the number of nodes expanded.
+\subsubsection{DFS and BFS}
+The only difference in the two implementations where we assumed no ghosts being present in the maze to assume a uniform cost function, the DFS implementation used a stack while the BFS implementation used a queue.
+
+\subsubsection{A* Search}
+The A* search\cite{russell2003artificial} worked almost equivalently in speed to the BFS and DFS since the distance was the only metric we needed to solve using to get the food spot. To complicate this, we implement the next part.
+\subsubsection{Corner Finding Problem}
+This problem was a bit more complicated since now there are food spots on all the 3 corners other than the one our Pac-Man agent starts from. The task is to cover all the spots by expanding the least number of nodes.  
+\fig{CS188_Pacman_001.png}{A* Corners Solver}{0.4}  
+Further, we implement a sub-optimal solution to implement the search in a faster manner with the expansion of fewer nodes (ID A* Search).
+\subsection{Food Eating With Optimized Search}
+Now, instead of just a single or three or four food sources, we implemented a solution for finding a fast path solution for eating multiple food sources.
+\fig{CS188_Pacman_002.png}{Problem State for the Food Eating Problem}{0.4}
+This increases the problem of expansion of nodes in the search of one food source exponentially because of which our optimal solution using full expansion of all the nodes till each food spot resulted in the run taking close to 220 seconds.
+
+Therefore, the suboptimal solution was tested next to see if we could complete the task in less time: \\
+\fig{CS188_Pacman_003.png}{Suboptimal Search}{0.4}
+Time taken: 0.74s
+
+\section{Multi-Agent Adversarial Search}
+For this problem, it was a food capturing situation with the ghosts as our adversaries where they are actively on our agent's tails in the entire run. \fig{CS188_Pacman_004.png}{Simple Reflex Solver}{0.4} The first part was implementing a simple reflex agent based on distance from food sources and ghosts. \fig{CS188_Pacman_005.png}{Minimax Solver}{0.4}
+The next part was implementing a minimax agent with subsequent parts extending it to alpha-beta and then to expecti-minimax\cite{russell2003artificial} where the only difference between minimax and alpha-beta was that the latter had an appreciably faster runtime. However, on the expectimax run, it depended on our heuristic function how well our agent moved compared to the ghosts for food sources that were at a greater distance from the current agent location.
+
+\section{Reinforcement Learning}
+In this part of the project, we implemented a value iteration agent for solving known MDPs. This solver was used then in the Q-Learning part where we trained our implementation on 20000 runs or episodes and then tested our learned agent on 500 test games. The output resulted in wins for our agent close to 90\% of the time suggesting it had learned very well the state transitions for various situations.\\
+\fig{CS188_Pacman_006.png}{Q-Learning Agent for a Small Grid}{0.4}
+This however is a caution because our grid was very small sized and any increase in the size would result in an exponential increase in the number of states and hence a huge increase in the time taken to reach solutions. Hence, we solved for an approximate Q-Learning agent next which enabled us to solve for larger grids but would still take a lot of time because of the still significant increase in the size of the grid.
+
+\section{Ghostbusters}
+
+This part of the project was focused on solving for current ghost locations based on a noisy distance sensor model which decreases exponentially with block distance from the actual ghost location.\\
+\fig{busters.png}{The Ghostbusting Problem}{0.4}
+We implemented algorithms for performing both exact and approximate inference using Bayes' Nets.\\ 
+\fig{dbn.png}{The Bayes Net for the Inference Problem}{0.4} $G$ denotes the current ghost location and $E$ represents the estimate of the ghost location at the time instant. It takes into account the current location and the previous inference returned by our querying as its belief state.
+The problem was solved in two parts:
+\begin{enumerate}
+\item Solving for Exact inferences of current ghost locations
+\item Solving for Approximate inferences to implement a faster solution
+\end{enumerate}
+Exact Inference is first trained for inference values and their transitions.\\ \fig{CS188_Pacman_007.png}{Training for Exact Inference}{0.4}
+The knowledge that our agent has about the ghosts also involves the ways in which it can move and we needed to take into account all of these to create our solution. After training, the testing was done on a medium sized grid for the following case: \fig{CS188_Pacman_008.png}{Exact Inference}{0.4}
+The approximate versions of the solutions worked on similar training and test sized grids with the only benefit being reduced time for training the inference model for the Bayes Net.
+
+\section{Conclusion}
+This project has helped us provide a visualisation for each of the concepts we've learned in class as well the real world challenges that come in using them. We will try to improve upon our implemented work in this project later on our own so that we can remove the problems we faced in some places such as the IDA* implementation and the Q-Learning training time with use of advanced algorithms to make our computations faster.

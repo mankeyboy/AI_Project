@@ -1,0 +1,98 @@
+\chapter{Implementation Work}
+
+\label{ch:conclusions}
+
+\section{Data Collection and Cleaning Methodoloy}
+
+SDT Sensory Gloves  provide flexion data from fourteen sensors. For every usage run, they need to calibrated against a minimum and maximum flexion so that they don't give random errors in the readings.
+
+\textbf{Normalization of the readings} :\\
+The values for every orientation is according to a basic calibration on wearing the gloves for the first time; i.e, max and min sensor values were recorded for each sensor separately and the recorded values were normalized between 0 and 1 using the calibration results:
+\vskip 2mm
+$
+Value = \frac{(Value - min\_calibration)}{(max\_calibration)}
+$
+\vskip 2mm
+The Data was recorded by every member of the team for each character/number and the readings were received in a ‘.csv’ format file :\\
+\textbf{Input features} : \begin{itemize}\item Fourteen flexion sensor readings, hence X [dimension = 14]\end{itemize}
+\textbf{Output} :\begin{itemize}\item Y : Classification between 11 classes; i.e, digit values from 0 - 10 \textit{(For the digit classification)}\end{itemize}
+
+
+\section{Digit Recognition}
+
+From Figure 1.1, we can see clearly that for every unique number, we would be getting a unique vector as our features and that is what we have trained our models on which have all been described and explained in the Background section. For Support Vector Machines, we used two kernels to check which one could map the best to the input.
+
+\subsection{Model Comparison}
+
+\begin{table}[!h]
+\begin{center}
+\begin{tabular}{| c | c |}
+\hline
+\textbf{Classifier Model} & \textbf{Precision} \\
+\hline
+Artificial Neural Networks & 99.18 \\ \hline
+Boosted Tree Classifier & 98.95 \\ \hline
+Random Forest Classifier & 97.02 \\ \hline
+Decision Tree Classifier & 95.51 \\ \hline
+SVM(kernel = linear) & 87.69 \\ \hline
+SVM(kernel = rbf) & 85.15 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+This implementation seems to have a very high accuracy but it is also the case that since this is static input, mapping of input states to output is really easy here.
+\fig{chart_1.png}{Precision vs Classifier Models for Digit Recognition}{0.4}
+From the table and the corresponding histogram chart, we are able to gather a few relevant points:
+\begin{itemize}
+\item The topology of the manifold of gestures is not suitable for RBF kernel
+\item The linear kernel is more suited than the RBF kernel for this manifold
+\item Decision trees work better than SVM-Kernel  machines because of their ability to model nonlinear decision boundaries efficiently through a piece-wise linear approximation
+\item A random forest (ensemble of decision trees) generalizes better than a single decision tree
+\item A deep learning artificial neural network performed the best through data-driven representation learning from a huge amount of data
+\end{itemize}
+
+\section{Character \& Word Recognition}
+ The Character and Word recognition model are based on symbols from Figure 1.2. Every character can be its upper case or lower case version depending on where it occurs in the word. Along with the characters, we also took the data for the most common 50 words used in the vocabulary. This was used as our test set for the model generation. We created a model for character recognition, similar to our model for digit recognition and then, in order to test the algorithm, we followed four steps:
+ \begin{enumerate}
+\item Implemented the models on a dataset of sentences which were also recorded manually
+\item A continuous stream of characters was obtained
+\item The unique characters were separated from the string
+\item Then with the help of a dictionary, we modeled the string distribution to obtain the individual words
+\end{enumerate}
+
+\subsection{Model Comparison}
+
+\begin{table}[!h]
+\begin{center}
+\begin{tabular}{| c | c |}
+\hline
+\textbf{Classifier Model} & \textbf{Precision} \\
+\hline
+Artificial Neural Networks &  99.95 \\ \hline
+Boosted Tree Classifier & 99.92 \\ \hline
+Random Forest Classifier & 99.54 \\ \hline
+Decision Tree Classifier & 98.13 \\ \hline
+SVM(kernel = rbf) & 98.32 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+Our model for word recognition seems to give a very high accuracy for all cases, even more so than word which was an 11 element output vector compared to our Character set, which is a 37 element vector (11 digits + 26 characters) and it worked on all the models very well.
+
+Form the table for this and the corresponding histogram, we can draw a few conclusions:
+\begin{itemize}
+\item The decision tree classifier seems to have a problem when trying to classify between so many classes of output.
+\item The deep learning ANN implementation still performed the best because of its data-driven representation learning especially given the high number of output classes.
+\item A Boosted Decision Tree still gives results comparable to the ANN Classifier because of the same piece-wise linear approximation
+\item Also, the rbf kernel for the SVM seems to perform better when mapped to character data which was not the case in the digits model. However, it still lags behind in accuracy to ANN and Boosted Trees
+\end{itemize}
+\fig{chart_2.png}{Precision vs Classifier Models for Word Prediction}{0.4}
+
+\section{Future Work}
+
+The work implemented in this project gives us a model for American Sign Language recognition for individual words and simple sentences given the flexion data from sensors.
+Future work on this project would focus on three parts:
+\begin{enumerate}
+\item Extending the model to take care of non static input with continuous variation and marking symbol states and transition states for the input to provide a workable input to the classifier.
+\item Extending the model to check for correct sentence formation resulting in detection of even complicated sentences correctly by creating an LSTM based classifier for that.
+\item Extending the model to work directly with a stream of input and provide real-time translation of the symbols made with the gloves to the text
+\item Finally, creating an open source application encompassing the above tasks with a proper GUI interface 
+\end{enumerate}

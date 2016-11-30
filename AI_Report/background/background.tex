@@ -1,0 +1,44 @@
+\chapter{Background For Prediction Models}
+
+\label{ch:background}
+
+The first step in the Sign Language Recognition, after we have the mappings of text to sign for Digits, Characters and Words is to decide how to create a system that can take this feature set as our input and then predict the symbol given a random feature vector. This is where the Machine Learning comes into play. In this section, we are going to discuss the different Machine Learning models we have run our data on and how each one works and how each differs from the others. The symbol mappings have already been discussed in the Literature Review on this problem. Hence, we need our models to be trained with the given data.
+
+\section{Decision Trees}
+
+Decision Trees are a predictive model used to map observations about an item to conclusions about the item's target value. The goal is to create a model that predicts the value of a target variable based on several input variables. An example is shown in the diagram at right. Each interior node corresponds to one of the input variables; there are edges to children for each of the possible values of that input variable. Each leaf represents a value of the target variable given the values of the input variables represented by the path from the root to the leaf.
+
+A decision tree is a simple representation for classifying examples. For this section, assume that all of the features have finite discrete domains, and there is a single target feature called the classification. Each element of the domain of the classification is called a class. A decision tree or a classification tree is a tree in which each internal (non-leaf) node is labeled with an input feature. The arcs coming from a node labeled with a feature are labeled with each of the possible values of the feature. Each leaf of the tree is labeled with a class or a probability distribution over the classes.
+
+\fig{DT.png}{A Decison Tree Example}{1.0}
+
+\subsection{Boosted Trees}
+
+It is an optimization on the classical Decision Trees Classifier which builds the model in a stage-wise  fashion and generalizes them by allowing optimization of an arbitrary differentiable loss function.
+
+\subsection{Random Forests}
+It is another optimization of the Classical Decision Trees where we construct a multitude of decision trees at training time and outputs the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees.
+
+\fig{Random_Trees.png}{Random Trees Visualisation}{1.5}
+
+\section{Support Vector Machines}
+
+Support Vector Machines (SVMs) are supervised learning models with associated learning algorithms that analyze data used for classification and regression analysis. Given a set of training examples, each marked as belonging to one or the other of two categories, an SVM training algorithm builds a model that assigns new examples to one category or the other, making it a non-probabilistic binary linear classifier. An SVM model is a representation of the examples as points in space, mapped so that the examples of the separate categories are divided by a clear gap that is as wide as possible. New examples are then mapped into that same space and predicted to belong to a category based on which side of the gap they fall on.
+
+\fig{SVM.png}{An SVM Example in 2 dimensions}{1.5}
+
+ In a Support Vector Machines, a data point is viewed as a $p$-dimensional vector (a list of $p$ numbers), and we want to know whether we can separate such points with a  $(p-1)$ dimensional hyperplane. This is called a linear classifier. There are many hyperplanes that might classify the data. One reasonable choice as the best hyperplane is the one that represents the largest separation, or margin, between the two classes. So we choose the hyperplane so that the distance from it to the nearest data point on each side is maximized.
+
+\section{Artificial Neural Networks}
+
+Neural Networks are a computational approach which is based on a large collection of neural units loosely modeling the way the brain solves problems with large clusters of biological neurons connected by axons. Each neural unit is connected with many others, and links can be enforcing or inhibitory in their effect on the activation state of connected neural units. Each individual neural unit may have a summation function which combines the values of all its inputs together. There may be a threshold function or limiting function on each connection and on the unit itself such that it must surpass it before it can propagate to other neurons. These systems are self-learning and trained rather than explicitly programmed and excel in areas where the solution or feature detection is difficult to express in a traditional computer program.
+
+The word \textit{network} in the term 'artificial neural network' refers to the interconnections between the neurons in the different layers of each system. An example system has three layers. The first layer has input neurons which send data via synapses to the second layer of neurons, and then via more synapses to the third layer of output neurons. More complex systems will have more layers of neurons, some having increased layers of input neurons and output neurons. The synapses store parameters called "weights" that manipulate the data in the calculations.
+\fig{ANN.png}{AN ASR Example}{1.5}
+
+An ANN is typically defined by three types of parameters:
+\begin{itemize}
+\item The interconnection pattern between the different layers of neurons
+\item The learning process for updating the weights of the interconnections
+\item The activation function that converts a neuron's weighted input to its output activation.
+\end{itemize}
