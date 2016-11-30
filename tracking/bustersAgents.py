@@ -167,6 +167,7 @@ class GreedyBustersAgent(BustersAgent):
         for belief in livingGhostPositionDistributions:
             localMax.append(belief.argMax())
         goalCoordinate, goalProbability = None, 0
+        
         for index, coordinate in enumerate(localMax):
             if livingGhostPositionDistributions[index][coordinate] >= goalProbability:
                 goalCoordinate, goalProbability = coordinate, livingGhostPositionDistributions[index][coordinate]

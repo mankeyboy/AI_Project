@@ -48,6 +48,7 @@ class InferenceModule:
         ghostPosition = gameState.getGhostPosition(self.index) # The position you set
         actionDist = self.ghostAgent.getDistribution(gameState)
         dist = util.Counter()
+        
         for action, prob in actionDist.items():
             successorPosition = game.Actions.getSuccessor(ghostPosition, action)
             dist[successorPosition] = prob
