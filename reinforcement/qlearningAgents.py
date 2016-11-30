@@ -43,6 +43,7 @@ class QLearningAgent(ReinforcementAgent):
         ReinforcementAgent.__init__(self, **args)
 
         self.qvals = util.Counter()
+        
         print "ALPHA", self.alpha
         print "DISCOUNT", self.discount
         print "EXPLORATION", self.epsilon
