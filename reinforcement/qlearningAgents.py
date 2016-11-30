@@ -42,7 +42,7 @@ class QLearningAgent(ReinforcementAgent):
         "You can initialize Q-values here..."
         ReinforcementAgent.__init__(self, **args)
 
-        self.qValues = util.Counter()
+        self.qvals = util.Counter()
         print "ALPHA", self.alpha
         print "DISCOUNT", self.discount
         print "EXPLORATION", self.epsilon
@@ -53,7 +53,9 @@ class QLearningAgent(ReinforcementAgent):
           Should return 0.0 if we have never seen a state
           or the Q node value otherwise
         """
-        return self.qValues[(state, action)]
+        if (state, action) not in self.qvals:
+          self.qvals[(state, action)] = 0.0
+        return self.qvals[(state, action)]
 
     def computeValueFromQValues(self, state):
         """
@@ -62,8 +64,13 @@ class QLearningAgent(ReinforcementAgent):
           there are no legal actions, which is the case at the
           terminal state, you should return a value of 0.0.
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        legalActions = self.getLegalActions(state)
+        if len(legalActions)==0:
+          return 0.0
+        tmp = util.Counter()
+        for action in legalActions:
+          tmp[action] = self.getQValue(state, action)
+        return tmp[tmp.argMax()] 
 
     def computeActionFromQValues(self, state):
         """
@@ -71,8 +78,13 @@ class QLearningAgent(ReinforcementAgent):
           are no legal actions, which is the case at the terminal state,
           you should return None.
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        legalActions = self.getLegalActions(state)
+        if len(legalActions)==0:
+          return None
+        tmp = util.Counter()
+        for action in legalActions:
+          tmp[action] = self.getQValue(state, action)
+        return tmp.argMax()
 
     def getAction(self, state):
         """
@@ -88,8 +100,11 @@ class QLearningAgent(ReinforcementAgent):
         # Pick Action
         legalActions = self.getLegalActions(state)
         action = None
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        if len(legalActions)!=0:
+          if util.flipCoin(self.epsilon):
+            action = random.choice(legalActions)
+          else:
+            action = self.computeActionFromQValues(state)
 
         return action
 
