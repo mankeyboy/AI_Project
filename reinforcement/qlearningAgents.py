@@ -117,18 +117,13 @@ class QLearningAgent(ReinforcementAgent):
           NOTE: You should never call this function,
           it will be called on your behalf
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        self.qvals[(state,action)] =  ((1-self.alpha) * self.getQValue(state,action)) + self.alpha * (reward + self.discount * self.computeValueFromQValues(nextState))
 
     def getPolicy(self, state):
         return self.computeActionFromQValues(state)
 
     def getValue(self, state):
-        possibleStateQValues = util.Counter()
-        for action in self.getLegalActions(state):
-            possibleStateQValues[action] = self.getQValue(state, action)
-        
-        return possibleStateQValues[possibleStateQValues.argMax()]
+        return self.computeValueFromQValues(state)
 
 
 class PacmanQAgent(QLearningAgent):
@@ -184,15 +179,19 @@ class ApproximateQAgent(PacmanQAgent):
           Should return Q(state,action) = w * featureVector
           where * is the dotProduct operator
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        feats = self.featExtractor.getFeatures(state, action)
+        qval = 0
+        for f in feats:
+          qval += feats[f] * self.getWeights()[f]
+        return qval
 
     def update(self, state, action, nextState, reward):
         """
            Should update your weights based on transition
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        feats = self.featExtractor.getFeatures(state, action)
+        for f in feats: 
+          self.weights[f] = self.weights[f] + self.alpha * feats[f]*((reward + self.discount * self.computeValueFromQValues(nextState)) - self.getQValue(state, action))
 
     def final(self, state):
         "Called at the end of each game."
@@ -202,5 +201,4 @@ class ApproximateQAgent(PacmanQAgent):
         # did we finish training?
         if self.episodesSoFar == self.numTraining:
             # you might want to print your weights here for debugging
-            "*** YOUR CODE HERE ***"
             pass
